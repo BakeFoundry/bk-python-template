@@ -4,6 +4,11 @@ on:
   push:
   pull_request:
 
+permissions:
+    pull-requests: write
+    issues: write
+    contents: write
+
 jobs:
   run-ci:
     name: Python workflow
