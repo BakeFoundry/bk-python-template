@@ -5,11 +5,6 @@ on:
   pull_request:
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Start python workflow
-        uses: bakefoundry/bk-python-workflow@v1
+  run-ci:
+    - name: Python workflow
+      uses: bakefoundry/bk-python-workflow/.github/workflows/all-ci.yml@v1
