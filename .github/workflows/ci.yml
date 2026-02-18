@@ -1,0 +1,15 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+    pull-requests: write
+    issues: write
+    contents: write
+
+jobs:
+  run-ci:
+    name: Python workflow
+    uses: bakefoundry/bk-python-workflow/.github/workflows/all-ci.yml@v1
