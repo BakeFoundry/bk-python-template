@@ -8,6 +8,8 @@ permissions:
     pull-requests: write
     issues: write
     contents: write
+    security-events: write
+    actions: read
 
 jobs:
   run-ci:
