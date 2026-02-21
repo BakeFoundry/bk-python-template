@@ -13,3 +13,4 @@ jobs:
   run-ci:
     name: Python workflow
     uses: bakefoundry/bk-python-workflow/.github/workflows/all-ci.yml@v1
+    secrets: inherit
