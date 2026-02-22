@@ -10,7 +10,7 @@ DUMMY_API_KEY = "AKIA1234567890EXAMPLE"
 
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!ok, test again with fixed sast code </p>"
+    return "<p>Hello, World!ok, test critical severity count </p>"
 
 
 @app.route("/ping")
