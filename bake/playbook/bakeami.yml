@@ -6,6 +6,7 @@
     app_dir: /opt/python-app
     python_version: python3
     pip_executable: pip3
+    app_user: ec2-user
 
   tasks:
     - name: Update apt cache
@@ -27,7 +28,7 @@
         path: "{{ app_dir }}"
         state: directory
         mode: '0755'
-        owner: "{{ ansible_user | default('ubuntu') }}"
+        owner: "{{ app_user }}"
 
     - name: Copy application source
       copy:
