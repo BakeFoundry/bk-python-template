@@ -1,0 +1,66 @@
+---
+- name: Bake Python Application AMI
+  hosts: all
+  become: yes
+  vars:
+    app_dir: /opt/python-app
+    python_version: python3
+    pip_executable: pip3
+    app_user: ec2-user
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install system dependencies (Debian)
+      apt:
+        name:
+          - "{{ python_version }}"
+          - python3-pip
+          - python3-venv
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install system dependencies (RedHat/Amazon)
+      yum:
+        name:
+          - "{{ python_version }}"
+          - "{{ python_version }}-pip"
+        state: present
+      when: ansible_os_family == "RedHat" or ansible_os_family == "Amazon"
+
+    - name: Create application directory
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+        mode: '0755'
+        owner: "{{ app_user }}"
+
+    - name: Copy application source
+      copy:
+        src: ../../src/
+        dest: "{{ app_dir }}/src/"
+        mode: '0755'
+
+    - name: Copy requirements file
+      copy:
+        src: ../../requirements.txt
+        dest: "{{ app_dir }}/requirements.txt"
+        mode: '0644'
+
+    - name: Install Python dependencies
+      pip:
+        requirements: "{{ app_dir }}/requirements.txt"
+        executable: "{{ pip_executable }}"
+
+    - name: Set up application entry point (example script)
+      copy:
+        content: |
+          #!/bin/bash
+          cd {{ app_dir }}
+          export FLASK_APP=src/app.py
+          {{ python_version }} -m flask run --host=0.0.0.0
+        dest: /usr/local/bin/run-app
+        mode: '0755'

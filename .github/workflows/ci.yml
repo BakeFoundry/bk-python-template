@@ -8,8 +8,14 @@ permissions:
     pull-requests: write
     issues: write
     contents: write
+    security-events: write
+    id-token: write
 
 jobs:
   run-ci:
     name: Python workflow
     uses: bakefoundry/bk-python-workflow/.github/workflows/all-ci.yml@v1
+    with:
+      baking_recipe_playbook: "bake/playbook/bakeami.yml"
+      application_name: "python-app"
+    secrets: inherit
