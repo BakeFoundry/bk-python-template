@@ -42,6 +42,5 @@ jobs:
     with:
       baking_recipe_playbook: "bake/playbook/bakeami.yml"
       application_name: "python-app"
-      # You can now pass the latest tag pulled directly from the git repo:
       version_tag: ${{ needs.get-tag.outputs.release-version }}
     secrets: inherit
