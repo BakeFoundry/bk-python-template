@@ -30,7 +30,7 @@ jobs:
 
       - name: Fetch Latest Tag
         id: get-tag
-        run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+        run: echo "tag=$(git describe --tags --abbrev=0 --match 'v*.*.*')" >> $GITHUB_OUTPUT
 
       - name: Print Fetched Tag
         run: echo "Successfully fetched tag from repository - ${{ steps.get-tag.outputs.tag }}"
