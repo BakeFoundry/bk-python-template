@@ -1,8 +1,10 @@
 name: CI
 
 on:
-  push:
-  pull_request:
+  workflow_run:
+    workflows: ["Release"]
+    types:
+      - completed
 
 permissions:
     pull-requests: write
@@ -12,10 +14,31 @@ permissions:
     id-token: write
 
 jobs:
+  get-tag:
+    name: Get Latest Version Tag
+    # Ensure CI only proceeds if the Release workflow succeeded
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    outputs:
+      release-version: ${{ steps.get-tag.outputs.tag }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # fetch-depth: 0 is required to fetch all Git tags from the repository
+          fetch-depth: 0
+
+      - name: Fetch Latest Tag
+        id: get-tag
+        run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+
   run-ci:
     name: Python workflow
+    needs: get-tag
     uses: bakefoundry/bk-python-workflow/.github/workflows/all-ci.yml@v1
     with:
       baking_recipe_playbook: "bake/playbook/bakeami.yml"
       application_name: "python-app"
+      # You can now pass the latest tag pulled directly from the git repo:
+      # version_tag: ${{ needs.get-tag.outputs.release-version }}
     secrets: inherit
