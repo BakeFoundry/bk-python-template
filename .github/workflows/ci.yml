@@ -32,6 +32,9 @@ jobs:
         id: get-tag
         run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
 
+      - name: Print Fetched Tag
+        run: echo "Successfully fetched tag from repository - ${{ steps.get-tag.outputs.tag }}"
+
   run-ci:
     name: Python workflow
     needs: get-tag
